@@ -1,16 +1,71 @@
-# React + Vite
+# Request System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Stack
+- React (Vite)
+- Redux Toolkit + React Redux
+- SCSS Modules
+- LocalStorage (persist state)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+### Роль: User
+- Створення заявки (Title, Description)
+- Після створення заявка додається зі статусом **`new`**
+- Перегляд власного списку заявок (title, short description, status)
+- Редагування заявки, якщо статус `new`
+- Видалення заявки
+- Відображення дати створення
+- Сортування заявок (нові/старі)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Роль: Manager
+- Перегляд усіх заявок:
+  - ID
+  - Title
+  - Description
+  - Status
+  - Created date
+- Зміна статусу:
+  - `new` → `in progress`
+  - `in progress` → `done`
+- Фільтрація за статусом:
+  - all
+  - new
+  - in progress
+  - done
 
-## Expanding the ESLint configuration
+## Data persistence
+Стан додатку (роль + список заявок) зберігається в LocalStorage.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Ключ LocalStorage:
+- `request-system:v1`
+
+## Project setup
+
+### 1) Install dependencies
+```bash
+npm install
+```
+
+### 2) Run dev server
+```bash
+npm run dev
+```
+
+### 3) Build
+```bash
+npm run build
+```
+
+### 4) Preview production build
+```bash
+npm run preview
+```
+
+## Scripts
+- `npm run dev` — запуск у режимі розробки
+- `npm run build` — production build
+- `npm run preview` — локальний перегляд production build
+
+
+
