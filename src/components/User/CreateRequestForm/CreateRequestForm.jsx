@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./CreateRequestForm.module.scss";
 import { useDispatch } from "react-redux";
 import { requestCreate } from "../../../app/store/requestsSlice.js";
+import { addLog } from "../../../app/store/logsSlice.js";
 import { t } from "../../../app/translate/translations.js";
 
 const CreateRequestForm = ({ locale }) => {
@@ -29,13 +30,23 @@ const CreateRequestForm = ({ locale }) => {
     setTouched({ title: true, description: true });
     if (!isValid) return;
 
+    const trimmedTitle = title.trim();
+
     dispatch(
       requestCreate({
         id: crypto.randomUUID(),
-        title: title.trim(),
+        title: trimmedTitle,
         description: description.trim(),
         status: "new",
         createdAt: new Date().toISOString(),
+      }),
+    );
+
+    dispatch(
+      addLog({
+        role: "User",
+        action: tr.logActionCreate,
+        details: trimmedTitle,
       }),
     );
 

@@ -54,6 +54,22 @@ export const t = {
     emptyManager: "Немає заявок для відображення.",
     statusDone: "Статус вже done",
     advanceTo: (next) => `Перевести в: ${next}`,
+
+    // Logs
+    logsTab: "Логи",
+    logsTitle: "Логи дій системи",
+    clearLogs: "Очистити логи",
+    colTime: "Час",
+    colRole: "Роль",
+    colAction: "Дія",
+    colDetails: "Деталі",
+    noLogs: "Поки що немає записів у логах.",
+
+    // Log action names
+    logActionCreate: "Створив заявку",
+    logActionEdit: "Відредагував заявку",
+    logActionDelete: "Видалив заявку",
+    logActionAdvance: "Змінив статус заявки",
   },
 
   en: {
@@ -112,5 +128,21 @@ export const t = {
     emptyManager: "No requests to display.",
     statusDone: "Status is already done",
     advanceTo: (next) => `Move to: ${next}`,
+
+    // Logs
+    logsTab: "Logs",
+    logsTitle: "System Action Logs",
+    clearLogs: "Clear logs",
+    colTime: "Time",
+    colRole: "Role",
+    colAction: "Action",
+    colDetails: "Details",
+    noLogs: "No logs yet.",
+
+    // Log action names
+    logActionCreate: "Created request",
+    logActionEdit: "Edited request",
+    logActionDelete: "Deleted request",
+    logActionAdvance: "Advanced request status",
   },
 };

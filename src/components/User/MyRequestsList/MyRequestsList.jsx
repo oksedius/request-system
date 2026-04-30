@@ -6,6 +6,7 @@ import {
   requestDelete,
   requestUpdate,
 } from "../../../app/store/requestsSlice.js";
+import { addLog } from "../../../app/store/logsSlice.js";
 import { truncate } from "../../../app/utils/text.js";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal.jsx";
 import { formatDateTime } from "../../../app/utils/date.js";
@@ -52,6 +53,13 @@ const MyRequestsList = ({ locale }) => {
       requestUpdate({
         id: editing.id,
         patch: { title: editTitle.trim(), description: editDesc.trim() },
+      }),
+    );
+    dispatch(
+      addLog({
+        role: "User",
+        action: tr.logActionEdit,
+        details: editTitle.trim(),
       }),
     );
     cancelEdit();
@@ -171,7 +179,15 @@ const MyRequestsList = ({ locale }) => {
           confirmLabel={tr.btnConfirmDelete}
           cancelLabel={tr.btnCancelDelete}
           onConfirm={() => {
+            const title = sorted.find((r) => r.id === confirmId)?.title ?? "";
             dispatch(requestDelete(confirmId));
+            dispatch(
+              addLog({
+                role: "User",
+                action: tr.logActionDelete,
+                details: title,
+              }),
+            );
             setConfirmId(null);
           }}
           onCancel={() => setConfirmId(null)}
