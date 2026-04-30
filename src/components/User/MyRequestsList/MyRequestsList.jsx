@@ -10,8 +10,10 @@ import { truncate } from "../../../app/utils/text.js";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal.jsx";
 import { formatDateTime } from "../../../app/utils/date.js";
 import Badge from "../../common/Badge/Badge.jsx";
+import { t } from "../../../app/translate/translations.js";
 
-const MyRequestsList = () => {
+const MyRequestsList = ({ locale }) => {
+  const tr = t[locale];
   const requests = useSelector((s) => s.requests.requests);
   const dispatch = useDispatch();
   const [sortDir, setSortDir] = useState("desc");
@@ -28,10 +30,8 @@ const MyRequestsList = () => {
 
   const [editingId, setEditingId] = useState(null);
   const editing = sorted.find((r) => r.id === editingId) ?? null;
-
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
-
   const [confirmId, setConfirmId] = useState(null);
 
   const startEdit = (r) => {
@@ -58,23 +58,19 @@ const MyRequestsList = () => {
   };
 
   if (sorted.length === 0) {
-    return (
-      <div className={styles.empty}>
-        Поки що немає заявок. Створи першу через форму зліва.
-      </div>
-    );
+    return <div className={styles.empty}>{tr.emptyList}</div>;
   }
 
   return (
     <div className={styles.wrap}>
       <div className={styles.toolbar}>
-        <span className={styles.toolbarLabel}>Сортування:</span>
+        <span className={styles.toolbarLabel}>{tr.sortLabel}</span>
         <button
           type="button"
           className={styles.toolbarBtn}
           onClick={() => setSortDir((d) => (d === "desc" ? "asc" : "desc"))}
         >
-          {sortDir === "desc" ? "спочатку нові" : "спочатку старі"}
+          {sortDir === "desc" ? tr.sortNewest : tr.sortOldest}
         </button>
       </div>
 
@@ -93,7 +89,7 @@ const MyRequestsList = () => {
 
                   <div className={styles.meta}>
                     <span className={styles.metaText}>
-                      Створено: {formatDateTime(r.createdAt)}
+                      {tr.createdAt}: {formatDateTime(r.createdAt)}
                     </span>
                     <span className={styles.metaText}>ID: {r.id}</span>
                   </div>
@@ -126,21 +122,17 @@ const MyRequestsList = () => {
                         type="button"
                         className={styles.btn}
                         disabled={!canUserEdit(r)}
-                        title={
-                          !canUserEdit(r)
-                            ? "Редагування доступне тільки для статусу new"
-                            : ""
-                        }
+                        title={!canUserEdit(r) ? tr.editOnlyNew : ""}
                         onClick={() => startEdit(r)}
                       >
-                        Редагувати
+                        {tr.btnEdit}
                       </button>
                       <button
                         type="button"
                         className={`${styles.btn} ${styles.danger}`}
                         onClick={() => setConfirmId(r.id)}
                       >
-                        Видалити
+                        {tr.btnDelete}
                       </button>
                     </>
                   ) : (
@@ -153,14 +145,14 @@ const MyRequestsList = () => {
                           !editTitle.trim() || editDesc.trim().length < 10
                         }
                       >
-                        Зберегти
+                        {tr.btnSave}
                       </button>
                       <button
                         type="button"
                         className={styles.btn}
                         onClick={cancelEdit}
                       >
-                        Скасувати
+                        {tr.btnCancel}
                       </button>
                     </>
                   )}
@@ -173,7 +165,11 @@ const MyRequestsList = () => {
 
       {confirmId && (
         <ConfirmModal
-          message={`Видалити заявку «${sorted.find((r) => r.id === confirmId)?.title}»?`}
+          message={tr.confirmDelete(
+            sorted.find((r) => r.id === confirmId)?.title ?? "",
+          )}
+          confirmLabel={tr.btnConfirmDelete}
+          cancelLabel={tr.btnCancelDelete}
           onConfirm={() => {
             dispatch(requestDelete(confirmId));
             setConfirmId(null);

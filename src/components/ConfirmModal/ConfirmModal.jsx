@@ -1,19 +1,23 @@
 import React from "react";
 import styles from "./ConfirmModal.module.scss";
 
-// Confirm видалення
-
-const ConfirmModal = ({ message, onConfirm, onCancel }) => {
+const ConfirmModal = ({
+  message,
+  onConfirm,
+  onCancel,
+  confirmLabel = "Видалити",
+  cancelLabel = "Скасувати",
+}) => {
   return (
     <div className={styles.overlay} onClick={onCancel}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <p className={styles.message}>{message}</p>
         <div className={styles.actions}>
           <button className={styles.cancelBtn} onClick={onCancel}>
-            Скасувати
+            {cancelLabel}
           </button>
           <button className={styles.confirmBtn} onClick={onConfirm}>
-            Видалити
+            {confirmLabel}
           </button>
         </div>
       </div>

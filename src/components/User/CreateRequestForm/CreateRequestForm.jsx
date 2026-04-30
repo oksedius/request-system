@@ -2,18 +2,26 @@ import React, { useMemo, useState } from "react";
 import styles from "./CreateRequestForm.module.scss";
 import { useDispatch } from "react-redux";
 import { requestCreate } from "../../../app/store/requestsSlice.js";
-import { validateRequest } from "../../../app/validation/requestValidation.js";
+import { t } from "../../../app/translate/translations.js";
 
-const CreateRequestForm = () => {
+const CreateRequestForm = ({ locale }) => {
+  const tr = t[locale];
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [touched, setTouched] = useState({ title: false, description: false });
 
-  const errors = useMemo(
-    () => validateRequest({ title, description }),
-    [title, description],
-  );
+  const errors = useMemo(() => {
+    const errs = {};
+    const ti = (title ?? "").trim();
+    const di = (description ?? "").trim();
+    if (!ti) errs.title = tr.errorTitleRequired;
+    else if (ti.length < 3) errs.title = tr.errorTitleMin;
+    if (!di) errs.description = tr.errorDescRequired;
+    else if (di.length < 10) errs.description = tr.errorDescMin;
+    return errs;
+  }, [title, description, locale]);
+
   const isValid = Object.keys(errors).length === 0;
 
   const onSubmit = (e) => {
@@ -21,14 +29,13 @@ const CreateRequestForm = () => {
     setTouched({ title: true, description: true });
     if (!isValid) return;
 
-    const now = new Date().toISOString();
     dispatch(
       requestCreate({
         id: crypto.randomUUID(),
         title: title.trim(),
         description: description.trim(),
         status: "new",
-        createdAt: now,
+        createdAt: new Date().toISOString(),
       }),
     );
 
@@ -40,36 +47,36 @@ const CreateRequestForm = () => {
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <label className={styles.label}>
-        <span className={styles.labelText}>Title</span>
+        <span className={styles.labelText}>{tr.fieldTitle}</span>
         <input
           className={styles.input}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onBlur={() => setTouched((t) => ({ ...t, title: true }))}
-          placeholder="Напр. Потрібен доступ до сервісу"
+          placeholder={tr.placeholderTitle}
         />
-        {touched.title && errors.title ? (
+        {touched.title && errors.title && (
           <span className={styles.error}>{errors.title}</span>
-        ) : null}
+        )}
       </label>
 
       <label className={styles.label}>
-        <span className={styles.labelText}>Description</span>
+        <span className={styles.labelText}>{tr.fieldDescription}</span>
         <textarea
           className={styles.textarea}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           onBlur={() => setTouched((t) => ({ ...t, description: true }))}
-          placeholder="Опиши деталі заявки…"
+          placeholder={tr.placeholderDesc}
           rows={5}
         />
-        {touched.description && errors.description ? (
+        {touched.description && errors.description && (
           <span className={styles.error}>{errors.description}</span>
-        ) : null}
+        )}
       </label>
 
       <button className={styles.submit} type="submit" disabled={!isValid}>
-        Створити
+        {tr.btnCreate}
       </button>
     </form>
   );

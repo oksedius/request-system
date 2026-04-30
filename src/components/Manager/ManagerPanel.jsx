@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestStatusAdvance } from "../../app/store/requestsSlice.js";
 import Badge from "../common/Badge/Badge.jsx";
 import { formatDateTime } from "../../app/utils/date.js";
+import { t } from "../../app/translate/translations.js";
 
 const FILTERS = ["all", "new", "in progress", "done"];
 
-const ManagerPanel = () => {
+const ManagerPanel = ({ locale }) => {
+  const tr = t[locale];
   const requests = useSelector((s) => s.requests.requests);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
@@ -15,7 +17,6 @@ const ManagerPanel = () => {
   const rows = useMemo(() => {
     const list = [...requests];
     if (filter !== "all") return list.filter((r) => r.status === filter);
-
     list.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -26,7 +27,7 @@ const ManagerPanel = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.controls}>
-        <span className={styles.label}>Фільтр:</span>
+        <span className={styles.label}>{tr.filterLabel}</span>
         <div className={styles.pills}>
           {FILTERS.map((f) => (
             <button
@@ -42,21 +43,20 @@ const ManagerPanel = () => {
       </div>
 
       {rows.length === 0 ? (
-        <div className={styles.empty}>Немає заявок для відображення.</div>
+        <div className={styles.empty}>{tr.emptyManager}</div>
       ) : (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Actions</th>
+                <th>{tr.colId}</th>
+                <th>{tr.colTitle}</th>
+                <th>{tr.colDescription}</th>
+                <th>{tr.colStatus}</th>
+                <th>{tr.colCreated}</th>
+                <th>{tr.colActions}</th>
               </tr>
             </thead>
-
             <tbody>
               {rows.map((r) => {
                 const canAdvance =
@@ -83,11 +83,7 @@ const ManagerPanel = () => {
                         className={styles.btn}
                         disabled={!canAdvance}
                         onClick={() => dispatch(requestStatusAdvance(r.id))}
-                        title={
-                          !canAdvance
-                            ? "Статус вже done"
-                            : `Перевести в: ${next}`
-                        }
+                        title={!canAdvance ? tr.statusDone : tr.advanceTo(next)}
                       >
                         → {next}
                       </button>

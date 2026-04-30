@@ -1,41 +1,50 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styles from "./App.module.scss";
+import { useTheme } from "./hooks/useTheme.js";
+import { useLocale } from "./hooks/useLocale.js";
+import { t } from "./translate/translations.js";
 
 import RoleSwitch from "../components/RoleSwitch/RoleSwitch.jsx";
 import CreateRequestForm from "../components/User/CreateRequestForm/CreateRequestForm.jsx";
 import MyRequestsList from "../components/User/MyRequestsList/MyRequestsList.jsx";
 import ManagerPanel from "../components/Manager/ManagerPanel.jsx";
-import { useTheme } from "./hooks/useTheme.js";
 
 const AppLayout = () => {
-  // Хук за домопогою якого можна отримати поточну тему та функцію для її перемикання
   const role = useSelector((s) => s.requests.role);
-  const { theme, toggle } = useTheme();
+  const { theme, toggle: toggleTheme } = useTheme();
+  const { locale, toggle: toggleLocale } = useLocale();
+  const tr = t[locale];
 
   return (
     <div className={styles.app}>
       <header className={styles.header}>
         <div className={styles.titleBlock}>
-          <h1 className={styles.title}>Mini Request System</h1>
+          <h1 className={styles.title}>{tr.appTitle}</h1>
           <p className={styles.subtitle}>
-            Роль: <b>{role}</b>
+            {tr.role}: <b>{role}</b>
           </p>
         </div>
+
         <div className={styles.headerRight}>
           <button
             type="button"
             className={styles.themeBtn}
-            onClick={toggle}
-            title={
-              theme === "light"
-                ? "Увімкнути темну тему"
-                : "Увімкнути світлу тему"
-            }
+            onClick={toggleTheme}
+            title={theme === "light" ? tr.themeDarkTitle : tr.themeLightTitle}
           >
-            {theme === "light" ? "🌙 Темна" : "☀️ Світла"}
+            {theme === "light" ? tr.themeDark : tr.themeLight}
           </button>
-          <RoleSwitch />
+
+          <button
+            type="button"
+            className={styles.themeBtn}
+            onClick={toggleLocale}
+          >
+            {locale === "uk" ? "🇬🇧 EN" : "🇺🇦 UA"}
+          </button>
+
+          <RoleSwitch locale={locale} />
         </div>
       </header>
 
@@ -43,19 +52,19 @@ const AppLayout = () => {
         {role === "User" ? (
           <div className={styles.flex}>
             <section className={styles.card}>
-              <h2 className={styles.h2}>Створити заявку</h2>
-              <CreateRequestForm />
+              <h2 className={styles.h2}>{tr.createTitle}</h2>
+              <CreateRequestForm locale={locale} />
             </section>
 
             <section className={styles.card}>
-              <h2 className={styles.h2}>Мої заявки</h2>
-              <MyRequestsList />
+              <h2 className={styles.h2}>{tr.myRequests}</h2>
+              <MyRequestsList locale={locale} />
             </section>
           </div>
         ) : (
           <section className={styles.card}>
-            <h2 className={styles.h2}>Панель менеджера</h2>
-            <ManagerPanel />
+            <h2 className={styles.h2}>{tr.managerPanel}</h2>
+            <ManagerPanel locale={locale} />
           </section>
         )}
       </div>
