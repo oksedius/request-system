@@ -7,6 +7,7 @@ import {
   requestUpdate,
 } from "../../../app/store/requestsSlice.js";
 import { truncate } from "../../../app/utils/text.js";
+import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal.jsx";
 import { formatDateTime } from "../../../app/utils/date.js";
 import Badge from "../../common/Badge/Badge.jsx";
 
@@ -30,6 +31,8 @@ const MyRequestsList = () => {
 
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
+
+  const [confirmId, setConfirmId] = useState(null);
 
   const startEdit = (r) => {
     setEditingId(r.id);
@@ -135,7 +138,7 @@ const MyRequestsList = () => {
                       <button
                         type="button"
                         className={`${styles.btn} ${styles.danger}`}
-                        onClick={() => dispatch(requestDelete(r.id))}
+                        onClick={() => setConfirmId(r.id)}
                       >
                         Видалити
                       </button>
@@ -167,6 +170,17 @@ const MyRequestsList = () => {
           );
         })}
       </ul>
+
+      {confirmId && (
+        <ConfirmModal
+          message={`Видалити заявку «${sorted.find((r) => r.id === confirmId)?.title}»?`}
+          onConfirm={() => {
+            dispatch(requestDelete(confirmId));
+            setConfirmId(null);
+          }}
+          onCancel={() => setConfirmId(null)}
+        />
+      )}
     </div>
   );
 };

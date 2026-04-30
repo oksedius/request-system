@@ -3,7 +3,7 @@ import styles from "./RoleSwitch.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { roleSet } from "../../app/store/requestsSlice.js";
 
-export default function RoleSwitch() {
+const RoleSwitch = () => {
   const role = useSelector((s) => s.requests.role);
   const dispatch = useDispatch();
 
@@ -34,4 +34,6 @@ export default function RoleSwitch() {
       </button>
     </div>
   );
-}
+};
+
+export default RoleSwitch;

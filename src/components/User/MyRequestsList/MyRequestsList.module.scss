@@ -9,24 +9,25 @@
   align-items: center;
   gap: 10px;
   padding-bottom: 6px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
 }
 
 .toolbarLabel {
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
 .toolbarBtn {
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
   padding: 6px 10px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 700;
 
   &:hover {
-    background: #f9fafb;
+    background: var(--bg-muted);
   }
 }
 
@@ -40,10 +41,10 @@
 }
 
 .item {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
-  background: #fff;
+  background: var(--bg-card);
 }
 
 .topRow {
@@ -78,12 +79,12 @@
 
 .metaText {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .desc {
   margin: 10px 0 0;
-  color: #374151;
+  color: var(--text-body);
   line-height: 1.35;
 }
 
@@ -95,15 +96,16 @@
 }
 
 .btn {
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
   padding: 8px 10px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 800;
 
   &:hover {
-    background: #f9fafb;
+    background: var(--bg-muted);
   }
 
   &:disabled {
@@ -113,12 +115,11 @@
 }
 
 .danger {
-  border-color: #fecaca;
-  background: #fff;
-  color: #b91c1c;
+  border-color: var(--border-danger);
+  color: var(--text-danger);
 
   &:hover {
-    background: #fff1f2;
+    background: var(--bg-muted);
   }
 }
 
@@ -131,22 +132,24 @@
 
 .input,
 .textarea {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
   font: inherit;
   outline: none;
+  background: var(--bg-input);
+  color: var(--text-primary);
 
   &:focus {
-    border-color: #111827;
+    border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
   }
 }
 
 .empty {
-  color: #6b7280;
-  background: #f9fafb;
-  border: 1px dashed #e5e7eb;
+  color: var(--text-muted);
+  background: var(--bg-muted);
+  border: 1px dashed var(--border);
   padding: 12px;
   border-radius: 12px;
 }
